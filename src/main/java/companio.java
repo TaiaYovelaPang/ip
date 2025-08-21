@@ -1,6 +1,11 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class companio {
+
+    //creation of task list
+    private static final ArrayList<String> tasks = new ArrayList<>();
+
     public static void main(String[] args) {
         String greeting = "Hello! I'm COMPANIO \n"
                 + "What can I do for you?";
@@ -16,7 +21,7 @@ public class companio {
         Scanner scanner = new Scanner(System.in);
         String input;
 
-        //Echoing
+        //Doing what user wants
         while (true) {
             input = scanner.nextLine();
             if (input.equals("bye")) {
@@ -24,10 +29,10 @@ public class companio {
                 System.out.println(bye);
                 printLine();
                 break;
+            } else if (input.equals("list")) {
+                listing();
             } else {
-                printLine();
-                System.out.println(input);
-                printLine();
+                adding(input);
             }
         }
         scanner.close();
@@ -39,5 +44,22 @@ public class companio {
             System.out.print("_");
         }
         System.out.println(); //moves to next line
+    }
+
+    // To store text given by user
+    public static void adding(String input) {
+        tasks.add(input);
+        printLine();
+        System.out.println("added task: " + input);
+        printLine();
+    }
+
+    //To list tasks
+    public static void listing() {
+        printLine();
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i+1) + ". " + tasks.get(i));
+        }
+        printLine();
     }
 }
