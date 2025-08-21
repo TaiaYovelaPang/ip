@@ -35,6 +35,8 @@ public class companio {
                 marking(input);
             } else if (input.startsWith("unmark ")) {
                 unmarking(input);
+            } else if (input.startsWith("delete ")) {
+                deleting(input);
             } else {
                 adding(input);
             }
@@ -87,6 +89,26 @@ public class companio {
                     + "Number of tasks: " + tasks.size());
             printLine();
         } catch (CompanioException e) {
+            printLine();
+            System.out.println(e.getMessage());
+            printLine();
+        }
+    }
+
+    //To delete tasks
+    private static void deleting(String input) {
+        try {
+            int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
+            if (index < 0 || index >= tasks.size()) {
+                throw new CompanioException("No such task found.");
+            }
+            Task removedTask = tasks.remove(index);
+            printLine();
+            System.out.println("Yay! One task removed!\n"
+                    + "    " + removedTask + "\n"
+                    + "Number of tasks: " + tasks.size());
+            printLine();
+        } catch (CompanioException e){
             printLine();
             System.out.println(e.getMessage());
             printLine();
