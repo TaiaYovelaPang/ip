@@ -50,11 +50,28 @@ public class companio {
         System.out.println(); //moves to next line
     }
 
-    // To store text given by user
+    // To add tasks given by user
     private static void adding(String input) {
-        tasks.add(new Task(input));
+        Task task;
+        if (input.startsWith("todo ")) {
+            task = new ToDo(input.substring(5));
+        } else if (input.startsWith("deadline ")){
+            String[] string = input.substring(9).split("/");
+            task = new Deadline(string[0], string[1]);
+        } else if (input.startsWith("event ")) {
+            String[] string = input.substring(6).split("/");
+            task = new Event(string[0], string[1], string[2]);
+        } else {
+            printLine();
+            System.out.println("Unknown task type!");
+            printLine();
+            return; //Exit early so task isn't used uninitialized
+        }
+        tasks.add(task);
         printLine();
-        System.out.println("added task: " + input);
+        System.out.println("One task added: \n"
+                + task + "\n"
+                + "Number of tasks: " + tasks.size());
         printLine();
     }
 
