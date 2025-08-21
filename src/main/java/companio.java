@@ -7,7 +7,7 @@ public class companio {
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
-        String greeting = "Hello! I'm COMPANIO \n"
+        String greeting = "Hello! I'm COMPANIO\n"
                 + "What can I do for you?";
 
         String bye = "Bye. Till next time!";
@@ -69,7 +69,7 @@ public class companio {
         }
         tasks.add(task);
         printLine();
-        System.out.println("One task added: \n"
+        System.out.println("One task added:\n"
                 + task + "\n"
                 + "Number of tasks: " + tasks.size());
         printLine();
