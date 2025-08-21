@@ -52,27 +52,45 @@ public class companio {
 
     // To add tasks given by user
     private static void adding(String input) {
-        Task task;
-        if (input.startsWith("todo ")) {
-            task = new ToDo(input.substring(5));
-        } else if (input.startsWith("deadline ")){
-            String[] string = input.substring(9).split("/");
-            task = new Deadline(string[0], string[1]);
-        } else if (input.startsWith("event ")) {
-            String[] string = input.substring(6).split("/");
-            task = new Event(string[0], string[1], string[2]);
-        } else {
+        try {
+            Task task;
+            if (input.startsWith("todo")) {
+                if (input.trim().equals("todo")) {
+                    throw new CompanioException("todo description is empty!");
+                }
+                task = new ToDo(input.substring(5));
+            } else if (input.startsWith("deadline")) {
+                if (input.trim().equals("deadline")) {
+                    throw new CompanioException("deadline description is empty");
+                }
+                String[] string = input.substring(9).split("/");
+                if (string.length < 2) {
+                    throw new CompanioException("missing deadline for task!");
+                }
+                task = new Deadline(string[0], string[1]);
+            } else if (input.startsWith("event")) {
+                if (input.trim().equals("event")) {
+                    throw new CompanioException("event description is empty");
+                }
+                String[] string = input.substring(6).split("/");
+                if (string.length < 3) {
+                    throw new CompanioException("event details not specified!");
+                }
+                task = new Event(string[0], string[1], string[2]);
+            } else {
+                throw new CompanioException("Unknown task type!");
+            }
+            tasks.add(task);
             printLine();
-            System.out.println("Unknown task type!");
+            System.out.println("One task added:\n"
+                    + "    " + task + "\n"
+                    + "Number of tasks: " + tasks.size());
             printLine();
-            return; //Exit early so task isn't used uninitialized
+        } catch (CompanioException e) {
+            printLine();
+            System.out.println(e.getMessage());
+            printLine();
         }
-        tasks.add(task);
-        printLine();
-        System.out.println("One task added:\n"
-                + task + "\n"
-                + "Number of tasks: " + tasks.size());
-        printLine();
     }
 
     //To list tasks
