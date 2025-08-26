@@ -1,12 +1,15 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class companio {
+public class Companio {
+
+    private static TaskStorage storage = new TaskStorage("./data/companio.txt");
 
     //creation of task list
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CompanioException, IOException {
         String greeting = "Hello! I'm COMPANIO\n"
                 + "What can I do for you?";
 
@@ -16,6 +19,9 @@ public class companio {
         printLine();
         System.out.println(greeting);
         printLine();
+
+        //Reading from file
+        tasks = storage.load();
 
         //Getting input from user
         Scanner scanner = new Scanner(System.in);
@@ -78,17 +84,18 @@ public class companio {
                 if (string.length < 3) {
                     throw new CompanioException("event details not specified!");
                 }
-                task = new Event(string[0], string[1], string[2]);
+                task = new Event(string[0], string[1].concat(string[2]));
             } else {
                 throw new CompanioException("Unknown task type!");
             }
             tasks.add(task);
+            storage.save(tasks);
             printLine();
             System.out.println("One task added:\n"
                     + "    " + task + "\n"
                     + "Number of tasks: " + tasks.size());
             printLine();
-        } catch (CompanioException e) {
+        } catch (CompanioException | IOException e) {
             printLine();
             System.out.println(e.getMessage());
             printLine();
@@ -103,12 +110,13 @@ public class companio {
                 throw new CompanioException("No such task found.");
             }
             Task removedTask = tasks.remove(index);
+            storage.save(tasks);
             printLine();
             System.out.println("Yay! One task removed!\n"
                     + "    " + removedTask + "\n"
                     + "Number of tasks: " + tasks.size());
             printLine();
-        } catch (CompanioException e){
+        } catch (CompanioException | IOException e){
             printLine();
             System.out.println(e.getMessage());
             printLine();
@@ -131,6 +139,7 @@ public class companio {
             int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
             Task task = tasks.get(index);
             task.done();
+            storage.save(tasks);
             printLine();
             System.out.println("Good job in completing a task! \n"
                     + "    " + task);
@@ -148,6 +157,7 @@ public class companio {
             int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
             Task task = tasks.get(index);
             task.undone();
+            storage.save(tasks);
             printLine();
             System.out.println("Oops, one more undone task. \n"
                     + "    " + task);

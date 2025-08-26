@@ -6,8 +6,18 @@ public class Deadline extends Task {
         this.byWhen = byWhen;
     }
 
+    public Deadline(String description, boolean isDone, String byWhen) {
+        super(description, isDone);
+        this.byWhen = byWhen;
+    }
+
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (" + byWhen + ")";
+        return "[D]" + super.toString() + "(" + byWhen + ")";
+    }
+
+    @Override
+    public String toSave() {
+        return "D|" + super.toSave() + "|" + this.byWhen;
     }
 }
