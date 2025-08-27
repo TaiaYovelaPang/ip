@@ -1,3 +1,5 @@
+package companio;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,6 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import companio.task.Task;
+import companio.task.ToDo;
+import companio.task.Deadline;
+import companio.task.Event;
+import companio.task.TaskStorage;
 
 public class Companio {
 

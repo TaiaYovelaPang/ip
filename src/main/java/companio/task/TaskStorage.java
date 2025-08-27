@@ -1,3 +1,7 @@
+package companio.task;
+
+import companio.CompanioException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
