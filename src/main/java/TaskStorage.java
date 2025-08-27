@@ -57,7 +57,7 @@ public class TaskStorage {
         case "D":
             return new Deadline(description, isDone, strings[3]);
         case "E":
-            return new Event(description, isDone, strings[3]);
+            return new Event(description, isDone, strings[3], strings[4],  strings[5]);
         default:
             throw new CompanioException("Unknown task type!");
         }
