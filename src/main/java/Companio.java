@@ -1,4 +1,9 @@
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -75,16 +80,41 @@ public class Companio {
                 if (string.length < 2) {
                     throw new CompanioException("missing deadline for task!");
                 }
-                task = new Deadline(string[0], string[1]);
+                LocalDateTime deadline;
+                try {
+                    DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    deadline = LocalDateTime.parse(string[1].trim(), inputFormat);
+                } catch (DateTimeParseException e) {
+                    throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
+                }
+                task = new Deadline(string[0], deadline);
             } else if (input.startsWith("event")) {
                 if (input.trim().equals("event")) {
                     throw new CompanioException("event description is empty");
                 }
                 String[] string = input.substring(6).split("/");
-                if (string.length < 3) {
+                if (string.length < 4) {
                     throw new CompanioException("event details not specified!");
                 }
-                task = new Event(string[0], string[1].concat(string[2]));
+                LocalDate date;
+                try {
+                    date = LocalDate.parse(string[1].trim()); // ISO format expected: yyyy-MM-dd
+                } catch (DateTimeParseException e) {
+                    throw new CompanioException("Invalid date format! Use yyyy-MM-dd (e.g., 2025-08-30).");
+                }
+                LocalTime startTime;
+                try {
+                    startTime = LocalTime.parse(string[2].trim());
+                } catch (DateTimeParseException e) {
+                    throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
+                }
+                LocalTime endTime;
+                try {
+                    endTime = LocalTime.parse(string[3].trim());
+                } catch (DateTimeParseException e) {
+                    throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
+                }
+                task = new Event(string[0], date, startTime, endTime);
             } else {
                 throw new CompanioException("Unknown task type!");
             }

@@ -1,23 +1,29 @@
-public class Deadline extends Task {
-    protected String byWhen;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String description, String byWhen) {
+public class Deadline extends Task {
+    protected LocalDateTime byWhen;
+
+    public Deadline(String description, LocalDateTime byWhen) {
         super(description);
         this.byWhen = byWhen;
     }
 
     public Deadline(String description, boolean isDone, String byWhen) {
         super(description, isDone);
-        this.byWhen = byWhen;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.byWhen = LocalDateTime.parse(byWhen, formatter);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + "(" + byWhen + ")";
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
+        return "[D]" + super.toString() + "(by: " + byWhen.format(outputFormat) + ")";
     }
 
     @Override
     public String toSave() {
-        return "D|" + super.toSave() + "|" + this.byWhen;
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return "D|" + super.toSave() + "|" + byWhen.format(outputFormat);
     }
 }
