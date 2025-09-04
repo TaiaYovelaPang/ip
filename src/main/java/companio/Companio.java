@@ -15,6 +15,17 @@ import companio.task.Deadline;
 import companio.task.Event;
 import companio.task.TaskStorage;
 
+/**
+ * The main class for Companio chatbot.
+ *
+ * <p> Companio is a personal assistant chatbot that helps users keep track of
+ * different types of tasks. </p>
+ *
+ * <p> Types of tasks: todo, deadline, event. </p>
+ *
+ * <p> Methods supported: add, delete, mark, unmark, list. </p>
+ */
+
 public class Companio {
 
     private static TaskStorage storage = new TaskStorage("./data/companio.txt");
