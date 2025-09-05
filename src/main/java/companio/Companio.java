@@ -1,5 +1,11 @@
 package companio;
 
+import companio.task.Task;
+import companio.task.ToDo;
+import companio.task.Deadline;
+import companio.task.Event;
+import companio.task.TaskStorage;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,11 +15,16 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import companio.task.Task;
-import companio.task.ToDo;
-import companio.task.Deadline;
-import companio.task.Event;
-import companio.task.TaskStorage;
+/**
+ * The main class for Companio chatbot.
+ *
+ * <p> Companio is a personal assistant chatbot that helps users keep track of
+ * different types of tasks. </p>
+ *
+ * <p> Types of tasks: todo, deadline, event </p>
+ *
+ * <p> Methods supported: add, delete, mark, unmark, list </p>
+ */
 
 public class Companio {
 
@@ -34,7 +45,7 @@ public class Companio {
         printLine();
 
         //Reading from file
-        tasks = storage.load();
+        tasks = storage.loadTaskList();
 
         //Getting input from user
         Scanner scanner = new Scanner(System.in);
@@ -49,15 +60,15 @@ public class Companio {
                 printLine();
                 break;
             } else if (input.equals("list")) {
-                listing();
+                listTasks();
             } else if (input.startsWith("mark ")) {
-                marking(input);
+                markTask(input);
             } else if (input.startsWith("unmark ")) {
-                unmarking(input);
+                unmarkTask(input);
             } else if (input.startsWith("delete ")) {
-                deleting(input);
+                deleteTask(input);
             } else {
-                adding(input);
+                addTask(input);
             }
         }
         scanner.close();
@@ -72,7 +83,7 @@ public class Companio {
     }
 
     // To add tasks given by user
-    private static void adding(String input) {
+    private static void addTask(String input) {
         try {
             Task task;
             if (input.startsWith("todo")) {
@@ -84,45 +95,45 @@ public class Companio {
                 if (input.trim().equals("deadline")) {
                     throw new CompanioException("deadline description is empty");
                 }
-                String[] string = input.substring(9).split("/");
-                if (string.length < 2) {
+                String[] strings = input.substring(9).split("/");
+                if (strings.length < 2) {
                     throw new CompanioException("missing deadline for task!");
                 }
                 LocalDateTime deadline;
                 try {
                     DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    deadline = LocalDateTime.parse(string[1].trim(), inputFormat);
+                    deadline = LocalDateTime.parse(strings[1].trim(), inputFormat);
                 } catch (DateTimeParseException e) {
                     throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
                 }
-                task = new Deadline(string[0], deadline);
+                task = new Deadline(strings[0], deadline);
             } else if (input.startsWith("event")) {
                 if (input.trim().equals("event")) {
                     throw new CompanioException("event description is empty");
                 }
-                String[] string = input.substring(6).split("/");
-                if (string.length < 4) {
+                String[] strings = input.substring(6).split("/");
+                if (strings.length < 4) {
                     throw new CompanioException("event details not specified!");
                 }
                 LocalDate date;
                 try {
-                    date = LocalDate.parse(string[1].trim()); // ISO format expected: yyyy-MM-dd
+                    date = LocalDate.parse(strings[1].trim()); // ISO format expected: yyyy-MM-dd
                 } catch (DateTimeParseException e) {
                     throw new CompanioException("Invalid date format! Use yyyy-MM-dd (e.g., 2025-08-30).");
                 }
                 LocalTime startTime;
                 try {
-                    startTime = LocalTime.parse(string[2].trim());
+                    startTime = LocalTime.parse(strings[2].trim());
                 } catch (DateTimeParseException e) {
                     throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
                 }
                 LocalTime endTime;
                 try {
-                    endTime = LocalTime.parse(string[3].trim());
+                    endTime = LocalTime.parse(strings[3].trim());
                 } catch (DateTimeParseException e) {
                     throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
                 }
-                task = new Event(string[0], date, startTime, endTime);
+                task = new Event(strings[0], date, startTime, endTime);
             } else {
                 throw new CompanioException("Unknown task type!");
             }
@@ -141,7 +152,7 @@ public class Companio {
     }
 
     //To delete tasks
-    private static void deleting(String input) {
+    private static void deleteTask(String input) {
         try {
             int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
             if (index < 0 || index >= tasks.size()) {
@@ -162,7 +173,7 @@ public class Companio {
     }
 
     //To list tasks
-    private static void listing() {
+    private static void listTasks() {
         printLine();
         System.out.println("Showing your to-do list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -172,11 +183,11 @@ public class Companio {
     }
 
     //To mark tasks
-    private static void marking(String input) {
+    private static void markTask(String input) {
         try {
             int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
             Task task = tasks.get(index);
-            task.done();
+            task.markAsDone();
             storage.save(tasks);
             printLine();
             System.out.println("Good job in completing a task! \n"
@@ -189,15 +200,15 @@ public class Companio {
         }
     }
 
-    //To mark tasks as undone
-    private static void unmarking(String input) {
+    //To mark tasks as markAsUndone
+    private static void unmarkTask(String input) {
         try {
             int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
             Task task = tasks.get(index);
-            task.undone();
+            task.markAsUndone();
             storage.save(tasks);
             printLine();
-            System.out.println("Oops, one more undone task. \n"
+            System.out.println("Oops, one more markAsUndone task. \n"
                     + "    " + task);
             printLine();
         } catch (Exception e) {
