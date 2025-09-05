@@ -40,7 +40,7 @@ public class TaskStorage {
         return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) throws IOException {
+    public void saveTask(ArrayList<Task> tasks) throws IOException {
         BufferedWriter writer = Files.newBufferedWriter(filePath);
         for (Task task : tasks) {
             writer.write(task.toSave());

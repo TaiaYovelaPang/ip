@@ -16,16 +16,16 @@ public class Task {
     }
 
     public String getStatus() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return (isDone ? "X" : " "); // mark markAsDone task with X
     }
 
-    //Marking a task as done
-    public void done() {
+    //Marking a task as markAsDone
+    public void markAsDone() {
         isDone = true;
     }
 
     //Marking a task as undone
-    public void undone() {
+    public void markAsUndone() {
         isDone = false;
     }
 
