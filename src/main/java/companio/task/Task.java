@@ -1,9 +1,5 @@
 package companio.task;
 
-/**
- * This class is a superclass for the different tasks supported by companio.
- */
-
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -32,7 +28,11 @@ public class Task {
      * @return "X" or " " depending on whether the task is done or not.
      */
     public String getStatus() {
-        return (isDone ? "X" : " "); // mark markAsDone task with X
+        return (isDone ? "X" : " "); // mark done task with X
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     /**
