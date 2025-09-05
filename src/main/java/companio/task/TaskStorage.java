@@ -10,27 +10,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-/**
- * Represents where companio saves the task list into the hard disk.
- */
 public class TaskStorage {
 
     private final Path filePath;
 
-    /**
-     * Initializes the path to the hard disk where the task list should be stored.
-     * @param path Path to the hard disk.
-     */
     public TaskStorage(String path) {
         this.filePath = Paths.get(path);
     }
 
-    /**
-     * Loads the list of task from hard disk to companio.
-     * @return List of task.
-     * @throws IOException
-     * @throws CompanioException
-     */
     public ArrayList<Task> load() throws IOException, CompanioException {
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -53,11 +40,6 @@ public class TaskStorage {
         return tasks;
     }
 
-    /**
-     * Saves the list of tasks onto the hard disk.
-     * @param tasks List of tasks.
-     * @throws IOException
-     */
     public void save(ArrayList<Task> tasks) throws IOException {
         BufferedWriter writer = Files.newBufferedWriter(filePath);
         for (Task task : tasks) {
