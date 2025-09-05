@@ -56,6 +56,8 @@ public class Companio {
                 unmarking(input);
             } else if (input.startsWith("delete ")) {
                 deleting(input);
+            } else if (input.startsWith("find ")) {
+                findTask(input);
             } else {
                 adding(input);
             }
@@ -203,6 +205,30 @@ public class Companio {
         } catch (Exception e) {
             printLine();
             System.out.println("No such task found.");
+            printLine();
+        }
+    }
+
+    private static void findTask(String input) throws CompanioException {
+        ArrayList<Task> tasksThatMatch = new ArrayList<>();
+        if (input.trim().equals("find")) {
+            throw new CompanioException("find description is empty!");
+        }
+        String description = input.substring(5);
+        for (Task task : tasks) {
+            if (task.getDescription().contains(description)) {
+                tasksThatMatch.add(task);
+            }
+        }
+        if (tasksThatMatch.isEmpty()) {
+            printLine();
+            System.out.println("No task matching your input found :(");
+            printLine();
+        } else {
+            printLine();
+            for (Task matchedTask : tasksThatMatch) {
+                System.out.println(matchedTask.toString());
+            }
             printLine();
         }
     }
