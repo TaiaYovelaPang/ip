@@ -13,7 +13,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * The main class for Companio chatbot.
@@ -33,214 +32,131 @@ public class Companio {
     //creation of task list
     private static ArrayList<Task> tasks = new ArrayList<>();
 
-    public static void main(String[] args) throws CompanioException, IOException {
-        String greeting = "Hello! I'm COMPANIO\n"
-                + "What can I do for you?";
-
-        String bye = "Bye. Till next time!";
-
-        //Initial greeting
-        printLine();
-        System.out.println(greeting);
-        printLine();
-
-        //Reading from file
+    public Companio() throws IOException, CompanioException {
         tasks = storage.loadTaskList();
-
-        //Getting input from user
-        Scanner scanner = new Scanner(System.in);
-        String input;
-
-        //Doing what user wants
-        while (true) {
-            input = scanner.nextLine();
-            if (input.equals("bye")) {
-                printLine();
-                System.out.println(bye);
-                printLine();
-                break;
-            } else if (input.equals("list")) {
-                listTasks();
-            } else if (input.startsWith("mark ")) {
-                markTask(input);
-            } else if (input.startsWith("unmark ")) {
-                unmarkTask(input);
-            } else if (input.startsWith("delete ")) {
-                deleteTask(input);
-            } else if (input.startsWith("find ")) {
-                findTask(input);
-            } else {
-                addTask(input);
-            }
-        }
-        scanner.close();
-    }
-
-    // To create horizontal line
-    private static void printLine() {
-        for (int i = 0; i < 50; i++) {
-            System.out.print("_");
-        }
-        System.out.println(); //moves to next line
     }
 
     // To add tasks given by user
-    private static void addTask(String input) {
-        try {
-            Task task;
-            if (input.startsWith("todo")) {
-                if (input.trim().equals("todo")) {
-                    throw new CompanioException("todo description is empty!");
-                }
-                task = new ToDo(input.substring(5));
-            } else if (input.startsWith("deadline")) {
-                if (input.trim().equals("deadline")) {
-                    throw new CompanioException("deadline description is empty");
-                }
-                String[] strings = input.substring(9).split("/");
-                if (strings.length < 2) {
-                    throw new CompanioException("missing deadline for task!");
-                }
-                LocalDateTime deadline;
-                try {
-                    DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    deadline = LocalDateTime.parse(strings[1].trim(), inputFormat);
-                } catch (DateTimeParseException e) {
-                    throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
-                }
-                task = new Deadline(strings[0], deadline);
-            } else if (input.startsWith("event")) {
-                if (input.trim().equals("event")) {
-                    throw new CompanioException("event description is empty");
-                }
-                String[] strings = input.substring(6).split("/");
-                if (strings.length < 4) {
-                    throw new CompanioException("event details not specified!");
-                }
-                LocalDate date;
-                try {
-                    date = LocalDate.parse(strings[1].trim()); // ISO format expected: yyyy-MM-dd
-                } catch (DateTimeParseException e) {
-                    throw new CompanioException("Invalid date format! Use yyyy-MM-dd (e.g., 2025-08-30).");
-                }
-                LocalTime startTime;
-                try {
-                    startTime = LocalTime.parse(strings[2].trim());
-                } catch (DateTimeParseException e) {
-                    throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
-                }
-                LocalTime endTime;
-                try {
-                    endTime = LocalTime.parse(strings[3].trim());
-                } catch (DateTimeParseException e) {
-                    throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
-                }
-                task = new Event(strings[0], date, startTime, endTime);
-            } else {
-                throw new CompanioException("Unknown task type!");
+    private Task addTask(String input) throws CompanioException {
+        Task task;
+        if (input.startsWith("todo")) {
+            if (input.trim().equals("todo")) {
+                throw new CompanioException("todo description is empty!");
             }
-            tasks.add(task);
-            storage.save(tasks);
-            printLine();
-            System.out.println("One task added:\n"
-                    + "    " + task + "\n"
-                    + "Number of tasks: " + tasks.size());
-            printLine();
-        } catch (CompanioException | IOException e) {
-            printLine();
-            System.out.println(e.getMessage());
-            printLine();
-        }
-    }
-
-    //To delete tasks
-    private static void deleteTask(String input) {
-        try {
-            int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
-            if (index < 0 || index >= tasks.size()) {
-                throw new CompanioException("No such task found.");
+            task = new ToDo(input.substring(5));
+        } else if (input.startsWith("deadline")) {
+            if (input.trim().equals("deadline")) {
+                throw new CompanioException("deadline description is empty");
             }
-            Task removedTask = tasks.remove(index);
-            storage.save(tasks);
-            printLine();
-            System.out.println("Yay! One task removed!\n"
-                    + "    " + removedTask + "\n"
-                    + "Number of tasks: " + tasks.size());
-            printLine();
-        } catch (CompanioException | IOException e){
-            printLine();
-            System.out.println(e.getMessage());
-            printLine();
+            String[] strings = input.substring(9).split("/");
+            if (strings.length < 2) {
+                throw new CompanioException("missing deadline for task!");
+            }
+            LocalDateTime deadline;
+            try {
+                DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                deadline = LocalDateTime.parse(strings[1].trim(), inputFormat);
+            } catch (DateTimeParseException e) {
+                throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
+            }
+            task = new Deadline(strings[0], deadline);
+        } else if (input.startsWith("event")) {
+            if (input.trim().equals("event")) {
+                throw new CompanioException("event description is empty");
+            }
+            String[] strings = input.substring(6).split("/");
+            if (strings.length < 4) {
+                throw new CompanioException("event details not specified!");
+            }
+            LocalDate date;
+            try {
+                date = LocalDate.parse(strings[1].trim()); // ISO format expected: yyyy-MM-dd
+            } catch (DateTimeParseException e) {
+                throw new CompanioException("Invalid date format! Use yyyy-MM-dd (e.g., 2025-08-30).");
+            }
+            LocalTime startTime;
+            try {
+                startTime = LocalTime.parse(strings[2].trim());
+            } catch (DateTimeParseException e) {
+                throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
+            }
+            LocalTime endTime;
+            try {
+                endTime = LocalTime.parse(strings[3].trim());
+            } catch (DateTimeParseException e) {
+                throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
+            }
+            task = new Event(strings[0], date, startTime, endTime);
+        } else {
+            throw new CompanioException("Unknown task type!");
         }
+        tasks.add(task);
+        return task;
     }
 
-    //To list tasks
-    private static void listTasks() {
-        printLine();
-        System.out.println("Showing your to-do list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i+1) + ". " + tasks.get(i));
-        }
-        printLine();
-    }
 
-    //To mark tasks
-    private static void markTask(String input) {
-        try {
-            int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
+    public String getResponse(String input) throws IOException, CompanioException {
+        StringBuilder response = new StringBuilder();
+        if (input.equals("bye")) {
+            response.append("Bye. Till next time!");
+        } else if (input.equals("list")) {
+            response.append("Showing your to-do list:\n");
+            for (int i = 0; i < tasks.size(); i++) {
+                response.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
+            }
+        } else if (input.startsWith("mark ")) {
+            int index = Integer.parseInt(input.split(" ")[1]) - 1;
             Task task = tasks.get(index);
             task.markAsDone();
             storage.save(tasks);
-            printLine();
-            System.out.println("Good job in completing a task! \n"
-                    + "    " + task);
-            printLine();
-        } catch (Exception e){
-            printLine();
-            System.out.println("No such task found.");
-            printLine();
-        }
-    }
-
-    //To mark tasks as markAsUndone
-    private static void unmarkTask(String input) {
-        try {
-            int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
+            response.append("Good job in completing a task!\n    ").append(task);
+        } else if (input.startsWith("unmark ")) {
+            int index = Integer.parseInt(input.split(" ")[1]) - 1;
             Task task = tasks.get(index);
             task.markAsUndone();
             storage.save(tasks);
-            printLine();
-            System.out.println("Oops, one more undone task. \n"
-                    + "    " + task);
-            printLine();
-        } catch (Exception e) {
-            printLine();
-            System.out.println("No such task found.");
-            printLine();
-        }
-    }
-
-    private static void findTask(String input) throws CompanioException {
-        ArrayList<Task> tasksThatMatch = new ArrayList<>();
-        if (input.trim().equals("find")) {
-            throw new CompanioException("find description is empty!");
-        }
-        String description = input.substring(5);
-        for (Task task : tasks) {
-            if (task.getDescription().contains(description)) {
-                tasksThatMatch.add(task);
+            response.append("Oops, one more undone task.\n    ").append(task);
+        } else if (input.startsWith("delete ")) {
+            try {
+                int index = Integer.parseInt(input.split(" ")[1]) - 1; //Tasks are 1 based
+                if (index < 0 || index >= tasks.size()) {
+                    throw new CompanioException("No such task found.");
+                }
+                Task removedTask = tasks.remove(index);
+                storage.save(tasks);
+                response.append("Yay! One task removed!\n    ").append(removedTask)
+                        .append("\nNumber of tasks: ").append(tasks.size());
+            } catch (CompanioException | IOException e){
+                response.append(e.getMessage());
             }
-        }
-        if (tasksThatMatch.isEmpty()) {
-            printLine();
-            System.out.println("No task matching your input found :(");
-            printLine();
+        } else if (input.startsWith("find ")) {
+            ArrayList<Task> matches = new ArrayList<>();
+            if (input.trim().equals("find")) {
+                throw new CompanioException("find description is empty!");
+            }
+            String description = input.substring(5);
+            for (Task task : tasks) {
+                if (task.getDescription().contains(description)) {
+                    matches.add(task);
+                }
+            }
+            if (matches.isEmpty()) {
+                response.append("No task matching your input found :(");
+            } else {
+                for (Task matchedTask : matches) {
+                    response.append(matchedTask);
+                }
+            }
         } else {
-            printLine();
-            for (Task matchedTask : tasksThatMatch) {
-                System.out.println(matchedTask.toString());
+            // Default: add a task
+            try {
+                Task task = addTask(input);
+                storage.save(tasks);
+                return "One task added:\n    " + task + "\nNumber of tasks: " + tasks.size();
+            } catch (CompanioException | IOException e) {
+                return e.getMessage();
             }
-            printLine();
         }
+        return response.toString();
     }
 }
