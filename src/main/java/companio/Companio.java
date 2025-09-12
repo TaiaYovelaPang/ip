@@ -34,10 +34,12 @@ public class Companio {
 
     public Companio() throws IOException, CompanioException {
         tasks = storage.loadTaskList();
+        assert tasks != null : "Task list should not be empty after loading from storage.";
     }
 
     // To add tasks given by user
     private Task addTask(String input) throws CompanioException {
+        assert input != null && !input.trim().isEmpty() : "Input should not be null or empty.";
         Task task;
         if (input.startsWith("todo")) {
             if (input.trim().equals("todo")) {
@@ -91,6 +93,7 @@ public class Companio {
             throw new CompanioException("Unknown task type!");
         }
         tasks.add(task);
+        assert tasks.contains(task) : "Task should be present in the task list after adding.";
         return task;
     }
 
