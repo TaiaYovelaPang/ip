@@ -1,4 +1,4 @@
-package companio.GUI;
+package companio.gui;
 
 import javafx.application.Application;
 
