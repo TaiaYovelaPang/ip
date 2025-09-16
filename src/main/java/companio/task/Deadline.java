@@ -1,6 +1,8 @@
 package companio.task;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
@@ -15,6 +17,16 @@ public class Deadline extends Task {
         super(description, isDone);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         this.byWhen = LocalDateTime.parse(byWhen, formatter);
+    }
+
+    @Override
+    public LocalTime getTime() {
+        return this.byWhen.toLocalTime();
+    }
+
+    @Override
+    public LocalDate getDate() {
+        return this.byWhen.toLocalDate();
     }
 
     @Override

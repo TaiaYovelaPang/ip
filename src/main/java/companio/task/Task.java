@@ -1,5 +1,8 @@
 package companio.task;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -33,6 +36,14 @@ public class Task {
 
     public String getDescription() {
         return description;
+    }
+
+    public LocalTime getTime() {
+        return null;
+    }
+
+    public LocalDate getDate() {
+        return null;
     }
 
     /**
