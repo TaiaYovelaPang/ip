@@ -3,13 +3,17 @@ package companio;
 import companio.addtask.AddDeadline;
 import companio.addtask.AddEvent;
 import companio.addtask.AddTodo;
+import companio.task.Deadline;
 import companio.task.Task;
 import companio.task.TaskStorage;
 
 import java.io.IOException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -86,6 +90,8 @@ public class Companio {
             return handleDelete(index);
         } else if (input.startsWith("find ")) {
             return handleFind(input);
+        } else if (input.startsWith("view ")) {
+            return handleView(input);
         } else {
             // Default: add a task
             try {
@@ -148,6 +154,24 @@ public class Companio {
             return "No task matching your input found :(";
         }
         return matches.stream()
+                .map(Task::toString)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String handleView(String input) throws CompanioException {
+        if (input.trim().equals("view")) {
+            throw new CompanioException("view date not specified!");
+        }
+        String dateString = input.substring(5);
+        LocalDate date = LocalDate.parse(dateString);
+        List<Task> schedule = tasks.stream()
+                .filter(t -> Objects.equals(t.getDate(), date))
+                .sorted(Comparator.comparing(Task::getTime))
+                .toList();
+        if (schedule.isEmpty()) {
+            return "Seems like your schedule is free today!";
+        }
+        return schedule.stream()
                 .map(Task::toString)
                 .collect(Collectors.joining("\n"));
     }
