@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents where companio saves the task list into the hard disk.
@@ -31,15 +32,15 @@ public class TaskStorage {
      * @throws IOException
      * @throws CompanioException
      */
-    public ArrayList<Task> loadTaskList() throws IOException, CompanioException {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public TaskList loadTaskList() throws IOException, CompanioException {
+        List<Task> tasks = new ArrayList<>();
 
         if (!Files.exists(filePath)) {
             System.out.println("No tasklist found. Creating a new one for you!");
             // Create missing directories and file
             Files.createDirectories(filePath.getParent());
             Files.createFile(filePath);
-            return tasks; // empty task list
+            return new TaskList(tasks); // empty task list
         }
 
         //Reading file that exists
@@ -50,7 +51,7 @@ public class TaskStorage {
             tasks.add(parseLine(line));
         }
 
-        return tasks;
+        return new TaskList(tasks);
     }
 
     /**
@@ -58,9 +59,9 @@ public class TaskStorage {
      * @param tasks List of tasks.
      * @throws IOException
      */
-    public void save(ArrayList<Task> tasks) throws IOException {
+    public void save(TaskList tasks) throws IOException {
         BufferedWriter writer = Files.newBufferedWriter(filePath);
-        for (Task task : tasks) {
+        for (Task task : tasks.asUnmodifiableList()) {
             writer.write(task.toSave());
             writer.newLine();
         }

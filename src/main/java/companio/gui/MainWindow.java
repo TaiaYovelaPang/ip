@@ -3,6 +3,7 @@ package companio.gui;
 import companio.Companio;
 
 import companio.CompanioException;
+import companio.CompanioExitException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -10,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -48,12 +50,24 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() throws CompanioException, IOException {
         String input = userInput.getText();
-        String response = companio.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getCompanioDialog(response, companioImage)
-        );
-        userInput.clear();
+        try {
+            String response = companio.getResponse(input);
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getCompanioDialog(response, companioImage)
+            );
+        } catch (CompanioExitException e) {
+            // show goodbye message
+            dialogContainer.getChildren().add(
+                    DialogBox.getCompanioDialog(e.getMessage(), companioImage)
+            );
+
+            // close stage
+            Stage stage = (Stage) dialogContainer.getScene().getWindow();
+            stage.close();
+        } finally {
+            userInput.clear();
+        }
     }
 }
 
