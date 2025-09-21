@@ -41,6 +41,11 @@ public class MainWindow extends AnchorPane {
     /** Injects the Companio instance */
     public void setCompanio(Companio c) {
         companio = c;
+
+        String welcome = "Hello! COMPANIO here :) \nHow can I help you today?";
+        dialogContainer.getChildren().add(
+                DialogBox.getCompanioDialog(welcome, companioImage)
+        );
     }
 
     /**
