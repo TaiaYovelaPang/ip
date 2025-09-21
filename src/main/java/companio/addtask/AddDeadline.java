@@ -4,7 +4,6 @@ import companio.CompanioException;
 import companio.task.Task;
 import companio.task.Deadline;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

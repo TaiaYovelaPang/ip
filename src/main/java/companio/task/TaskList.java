@@ -4,7 +4,6 @@ import companio.CompanioException;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Represents a collection of {@link Task} objects managed by Companio.
