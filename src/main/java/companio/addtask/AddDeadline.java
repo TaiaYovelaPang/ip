@@ -4,6 +4,7 @@ import companio.CompanioException;
 import companio.task.Task;
 import companio.task.Deadline;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -48,6 +49,9 @@ public class AddDeadline {
             deadline = LocalDateTime.parse(strings[1].trim(), inputFormat);
         } catch (DateTimeParseException e) {
             throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
+        }
+        if (deadline.isBefore(LocalDateTime.now())) {
+            throw new CompanioException("Oh no, your deadline seems to have passed :0");
         }
         Task task = new Deadline(strings[0], deadline);
         return task;

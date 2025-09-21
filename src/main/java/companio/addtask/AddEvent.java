@@ -60,6 +60,15 @@ public class AddEvent {
         } catch (DateTimeParseException e) {
             throw new CompanioException("Invalid time format! Use HH:mm (e.g., 18:25).");
         }
+        if (!endTime.isAfter(startTime)) {
+            throw new CompanioException("AHHH end time must be after start time!");
+        }
+        if (date.isBefore(LocalDate.now())) {
+            throw new CompanioException("Oh man, I cannot create a past event :(");
+        }
+        if (date.isEqual(LocalDate.now()) && endTime.isBefore(LocalTime.now())) {
+            throw new CompanioException("Oh man, I cannot create a past event :(");
+        }
         Task task = new Event(strings[0], date, startTime, endTime);
         return task;
     }

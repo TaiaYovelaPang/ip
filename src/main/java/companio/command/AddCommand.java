@@ -19,27 +19,31 @@ public class AddCommand implements Command {
 
     @Override
     public String execute(TaskList tasks, TaskStorage storage) throws IOException, CompanioException {
-        Task task;
+        try {
+            Task task;
 
-        if (input.startsWith("todo")) {
-            AddTodo todo = new AddTodo(input);
-            todo.checkInput();
-            task = todo.create();
-        } else if (input.startsWith("deadline")) {
-            AddDeadline deadline = new AddDeadline(input);
-            deadline.checkInput();
-            task = deadline.create();
-        } else if (input.startsWith("event")) {
-            AddEvent event = new AddEvent(input);
-            event.checkInput();
-            task = event.create();
-        } else {
-            return "Unknown task type!";
+            if (input.startsWith("todo")) {
+                AddTodo todo = new AddTodo(input);
+                todo.checkInput();
+                task = todo.create();
+            } else if (input.startsWith("deadline")) {
+                AddDeadline deadline = new AddDeadline(input);
+                deadline.checkInput();
+                task = deadline.create();
+            } else if (input.startsWith("event")) {
+                AddEvent event = new AddEvent(input);
+                event.checkInput();
+                task = event.create();
+            } else {
+                return "Unknown task type!";
+            }
+
+            tasks.add(task);
+            storage.save(tasks);
+
+            return "One task added:\n    " + task + "\nNumber of tasks: " + tasks.size();
+        } catch (CompanioException e) {
+            return e.getMessage();
         }
-
-        tasks.add(task);
-        storage.save(tasks);
-
-        return "One task added:\n    " + task + "\nNumber of tasks: " + tasks.size();
     }
 }
