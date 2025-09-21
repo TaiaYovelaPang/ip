@@ -13,8 +13,12 @@ import java.io.IOException;
 public class DeleteCommand implements Command {
     private final int index;
 
-    public DeleteCommand(String input) {
-        this.index = Integer.parseInt(input.split(" ")[1]) - 1;
+    public DeleteCommand(String input) throws CompanioException {
+        String[] parts = input.split(" ");
+        if (parts.length < 2) {
+            throw new CompanioException("Invalid formatting! Follow example: delete 2");
+        }
+        this.index = Integer.parseInt(parts[1]) - 1;
     }
 
     @Override

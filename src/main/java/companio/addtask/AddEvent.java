@@ -29,6 +29,9 @@ public class AddEvent {
         if (input.trim().equals("event")) {
             throw new CompanioException("event description is empty");
         }
+        if (!input.substring(0, 6).equals("event ")) {
+            throw new CompanioException("Invalid formatting!");
+        }
         String[] strings = input.substring(6).split("/");
         if (strings.length < 4) {
             throw new CompanioException("event details not specified!");

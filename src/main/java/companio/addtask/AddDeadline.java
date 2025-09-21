@@ -29,6 +29,9 @@ public class AddDeadline {
         if (input.trim().equals("deadline")) {
             throw new CompanioException("deadline description is empty");
         }
+        if (!input.substring(0, 9).equals("deadline ")) {
+            throw new CompanioException("Invalid formatting!");
+        }
         String[] strings = input.substring(9).split("/");
         if (strings.length < 2) {
             throw new CompanioException("missing deadline for task!");

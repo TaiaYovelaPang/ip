@@ -18,7 +18,11 @@ public class FindCommand implements Command {
         if (input.trim().equals("find")) {
             throw new CompanioException("find description is empty!");
         }
-        this.keyword = input.substring(5).trim();
+        String[] parts = input.split(" ");
+        if (parts.length < 2) {
+            throw new CompanioException("Invalid formatting! Follow example: find book");
+        }
+        this.keyword = parts[1].trim();
     }
 
     @Override

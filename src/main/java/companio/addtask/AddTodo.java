@@ -25,6 +25,10 @@ public class AddTodo {
          if (input.trim().equals("todo")) {
              throw new CompanioException("todo description is empty!");
          }
+         String[] parts = input.split(" ");
+         if (parts.length < 2) {
+             throw new CompanioException("Invalid formatting! Follow example: todo clean");
+         }
      }
 
     /**

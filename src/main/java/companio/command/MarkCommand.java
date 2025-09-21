@@ -13,8 +13,12 @@ import java.io.IOException;
 public class MarkCommand implements Command {
     private final int index;
 
-    public MarkCommand(String input) {
-        this.index = Integer.parseInt(input.split(" ")[1]) - 1;
+    public MarkCommand(String input) throws CompanioException {
+        String[] parts = input.split(" ");
+        if (parts.length < 2) {
+            throw new CompanioException("Invalid formatting! Follow example: mark 2");
+        }
+        this.index = Integer.parseInt(parts[1]) - 1;
     }
 
     @Override

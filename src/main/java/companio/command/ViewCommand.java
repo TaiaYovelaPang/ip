@@ -6,6 +6,7 @@ import companio.task.TaskList;
 import companio.task.TaskStorage;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +20,12 @@ public class ViewCommand implements Command {
         if (input.trim().equals("view")) {
             throw new CompanioException("view date not specified!");
         }
-        String dateString = input.substring(5).trim();
-        this.date = LocalDate.parse(dateString);
+        try {
+            String dateString = input.substring(5).trim();
+            this.date = LocalDate.parse(dateString);
+        } catch (DateTimeParseException e) {
+            throw new CompanioException("Invalid date format! Use yyyy-MM-dd (e.g., 2025-08-30).");
+        }
     }
 
     @Override

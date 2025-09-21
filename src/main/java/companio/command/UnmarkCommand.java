@@ -13,8 +13,12 @@ import java.io.IOException;
 public class UnmarkCommand implements Command {
     private final int index;
 
-    public UnmarkCommand(String input) {
-        this.index = Integer.parseInt(input.split(" ")[1]) - 1;
+    public UnmarkCommand(String input) throws CompanioException {
+        String[] parts = input.split(" ");
+        if (parts.length < 2) {
+            throw new CompanioException("Invalid formatting! Follow example: unmark 2");
+        }
+        this.index = Integer.parseInt(parts[1]) - 1;
     }
 
     @Override
