@@ -7,6 +7,9 @@ import companio.task.TaskStorage;
 
 import java.io.IOException;
 
+/**
+ * This class helps to delete the specified task, and checks whether said task exists.
+ */
 public class DeleteCommand implements Command {
     private final int index;
 

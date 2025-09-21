@@ -3,6 +3,18 @@ package companio.task;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Represents a general task that can be managed by Companio.
+ * <p>
+ * A {@code Task} serves as the base class for all specific task types, including:
+ * <ul>
+ *     <li>{@link companio.task.ToDo} – a simple task with only a description</li>
+ *     <li>{@link companio.task.Deadline} – a task that must be completed by a specific date and time</li>
+ *     <li>{@link companio.task.Event} – a task that occurs within a scheduled time range</li>
+ * </ul>
+ * Each task has a description and a completion status (done or not done). Subclasses
+ * extend this class to add additional properties such as deadlines or event durations.
+ */
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -34,14 +46,36 @@ public class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    /**
+     * Gets description of the task.
+     * @return the description.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Returns the time associated with this task, if any.
+     * <p>
+     * By default, {@code Task} does not have a time, so this method returns {@code null}.
+     * Subclasses such as {@link companio.task.Deadline} and {@link companio.task.Event}
+     * override this method to provide meaningful values.
+     *
+     * @return the {@link java.time.LocalTime} of this task, or {@code null} if not applicable
+     */
     public LocalTime getTime() {
         return null;
     }
 
+    /**
+     * Returns the date associated with this task, if any.
+     * <p>
+     * By default, {@code Task} does not have a date, so this method returns {@code null}.
+     * Subclasses such as {@link companio.task.Deadline} and {@link companio.task.Event}
+     * override this method to provide meaningful values.
+     *
+     * @return the {@link java.time.LocalDate} of this task, or {@code null} if not applicable
+     */
     public LocalDate getDate() {
         return null;
     }

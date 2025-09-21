@@ -10,6 +10,10 @@ import companio.task.TaskStorage;
 
 import java.io.IOException;
 
+/**
+ * This class helps to deal with todo, deadline and event additions. It also handles the case where
+ * the input is not any of the method calls for Companio.
+ */
 public class AddCommand implements Command {
     private final String input;
 

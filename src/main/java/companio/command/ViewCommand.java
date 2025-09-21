@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class helps to deal with the view command. It also checks if the date is specified.
+ */
 public class ViewCommand implements Command {
     private final LocalDate date;
 

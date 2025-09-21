@@ -5,6 +5,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that must be completed by a specific date and time.
+ * <p>
+ * A {@code Deadline} stores a description, a due {@link java.time.LocalDateTime}.
+ * It allows Companio to track tasks that have clear deadlines.
+ */
 public class Deadline extends Task {
     protected LocalDateTime byWhen;
 

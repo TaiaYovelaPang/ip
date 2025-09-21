@@ -24,7 +24,7 @@ public class AddDeadline {
 
     /**
      * Checks validity of the input given by user.
-     * @throws CompanioException
+     * @throws CompanioException exception to catch missing description
      */
     public void checkInput() throws CompanioException {
         if (input.trim().equals("deadline")) {
@@ -39,7 +39,7 @@ public class AddDeadline {
     /**
      * Creates a new deadline task.
      * @return Deadline task
-     * @throws CompanioException
+     * @throws CompanioException exception to catch deadline errors
      */
     public Task create() throws CompanioException {
         LocalDateTime deadline;

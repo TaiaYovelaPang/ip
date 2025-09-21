@@ -19,7 +19,7 @@ public class AddTodo {
 
     /**
      * Checks validity of the input given by user.
-     * @throws CompanioException
+     * @throws CompanioException exception to catch missing description
      */
      public void checkInput() throws CompanioException {
          if (input.trim().equals("todo")) {

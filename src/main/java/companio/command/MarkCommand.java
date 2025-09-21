@@ -7,6 +7,9 @@ import companio.task.TaskStorage;
 
 import java.io.IOException;
 
+/**
+ * This class helps to mark tasks as completed. It also checks if the task exists.
+ */
 public class MarkCommand implements Command {
     private final int index;
 

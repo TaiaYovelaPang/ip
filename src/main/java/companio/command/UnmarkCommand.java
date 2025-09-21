@@ -7,6 +7,9 @@ import companio.task.TaskStorage;
 
 import java.io.IOException;
 
+/**
+ * This class helps to unmark completed tasks. It also checks if the task exists.
+ */
 public class UnmarkCommand implements Command {
     private final int index;
 

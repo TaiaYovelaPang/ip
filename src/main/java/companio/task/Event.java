@@ -4,6 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that occurs during a specific time interval.
+ * <p>
+ * An {@code Event} stores a description, a {@link java.time.LocalDate}, a start time,
+ * and an end time. This allows Companio to track scheduled events that happen within
+ * a defined time range.
+ */
 public class Event extends Task {
 
     protected LocalDate date;

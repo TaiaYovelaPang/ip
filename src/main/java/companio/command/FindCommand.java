@@ -8,6 +8,9 @@ import companio.task.TaskStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class helps to deal with the find command. It also checks whether the find description is given.
+ */
 public class FindCommand implements Command {
     private final String keyword;
 

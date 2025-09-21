@@ -23,7 +23,7 @@ public class AddEvent {
 
     /**
      * Checks validity of the input given by user.
-     * @throws CompanioException
+     * @throws CompanioException exception to catch missing description
      */
     public void checkInput() throws CompanioException {
         if (input.trim().equals("event")) {
@@ -38,7 +38,7 @@ public class AddEvent {
     /**
      * Creates a new event task.
      * @return Event task
-     * @throws CompanioException
+     * @throws CompanioException exception to handle date and timing errors
      */
     public Task create() throws CompanioException {
         String[] strings = input.substring(6).split("/");
