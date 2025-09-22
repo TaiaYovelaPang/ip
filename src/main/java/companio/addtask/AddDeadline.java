@@ -50,7 +50,7 @@ public class AddDeadline {
             DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             deadline = LocalDateTime.parse(strings[1].trim(), inputFormat);
         } catch (DateTimeParseException e) {
-            throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HHmm (e.g., 2025-08-30 18:25).");
+            throw new CompanioException("Invalid deadline format! Use yyyy-MM-dd HH:mm (e.g., 2025-08-30 18:25).");
         }
         if (deadline.isBefore(LocalDateTime.now())) {
             throw new CompanioException("Oh no, your deadline seems to have passed :0");
